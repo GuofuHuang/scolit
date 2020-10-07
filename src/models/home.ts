@@ -11,7 +11,7 @@ const action = {
 
 interface HomeModel extends Model {
   namespace: 'home';
-  state?: {
+  state: {
     num: number;
   };
   reducers: {
