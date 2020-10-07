@@ -16,8 +16,9 @@ interface HomeModel extends Model {
   };
   reducers: {
     add: Reducer<HomeState>;
+    setStatus: Reducer<HomeState>;
   };
-  effects?: {
+  effects: {
     asyncAdd: Effect;
   };
 }
@@ -25,6 +26,12 @@ interface HomeModel extends Model {
 const initialState = {
   num: 0,
 };
+
+function delay(timeout: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+}
 
 const homeModel: HomeModel = {
   namespace: 'home',
@@ -37,6 +44,26 @@ const homeModel: HomeModel = {
         ...state,
         num: state?.num + payload.num,
       };
+    },
+    setStatus(state = initialState) {
+      return {
+        ...state,
+      };
+    },
+  },
+  effects: {
+    *asyncAdd({payload}, {call, put}) {
+      yield put({
+        type: 'setStatus',
+      });
+      yield call(delay, 3000);
+      yield put({
+        type: 'add',
+        payload,
+      });
+      yield put({
+        type: 'setStatus',
+      });
     },
   },
 };

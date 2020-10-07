@@ -4,8 +4,9 @@ import {connect, ConnectedProps} from 'react-redux';
 import {RootStackNavigation} from '@/navigator/index';
 import {RootState} from '@/models/index';
 
-const mapStateToProps = ({home}: RootState) => ({
+const mapStateToProps = ({home, loading}: RootState) => ({
   num: home.num,
+  loading: loading.effects['home/asyncAdd'],
 });
 
 const connector = connect(mapStateToProps);
@@ -23,7 +24,7 @@ class Home extends React.Component<IProps> {
       id: 100,
     });
   };
-  handleAdd = () => {
+  add = () => {
     const {dispatch} = this.props;
     dispatch({
       type: 'home/add',
@@ -32,12 +33,25 @@ class Home extends React.Component<IProps> {
       },
     });
   };
+
+  asyncAdd = () => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'home/asyncAdd',
+      payload: {
+        num: 2,
+      },
+    });
+  };
+
   render() {
-    const {num} = this.props;
+    const {num, loading} = this.props;
     return (
       <View>
         <Text>Home {num}</Text>
-        <Button title="加" onPress={this.handleAdd} />
+        <Text>{loading ? '努力计算中' : ''}</Text>
+        <Button title="加" onPress={this.add} />
+        <Button title="异步加" onPress={this.asyncAdd} />
         <Button title="跳转到详情页" onPress={this.onPress} />
       </View>
     );
