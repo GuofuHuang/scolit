@@ -51,7 +51,13 @@ class Navigator extends React.Component {
               }),
             },
           }}>
-          <Stack.Screen name="BottomTabs" component={BottomTabs} />
+          <Stack.Screen
+            name="BottomTabs"
+            component={BottomTabs}
+            options={{
+              headerTitle: '首页',
+            }}
+          />
           <Stack.Screen
             options={{headerTitle: '详情页'}}
             name="Detail"
