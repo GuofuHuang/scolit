@@ -6,12 +6,14 @@ import {
   HeaderStyleInterpolators,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import Home from '@/pages/Home';
+import BottomTabs from './BottomTabs';
 import Detail from '@/pages/Detail';
 import {Platform, StyleSheet} from 'react-native';
 
 export type RootStackParamList = {
-  Home: undefined;
+  BottomTabs: {
+    scree?: string;
+  };
   Detail: {
     id: number;
   };
@@ -49,11 +51,7 @@ class Navigator extends React.Component {
               }),
             },
           }}>
-          <Stack.Screen
-            options={{headerTitle: '首页'}}
-            name="Home"
-            component={Home}
-          />
+          <Stack.Screen name="BottomTabs" component={BottomTabs} />
           <Stack.Screen
             options={{headerTitle: '详情页'}}
             name="Detail"
