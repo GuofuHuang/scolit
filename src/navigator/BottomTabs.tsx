@@ -31,7 +31,7 @@ function getTitle(route: Route) {
     : route.params?.screen || 'HomeTabs';
   switch (routeName) {
     case 'HomeTabs':
-      return '首页1';
+      return '首页';
     case 'Listen':
       return '我听';
     case 'Found':
