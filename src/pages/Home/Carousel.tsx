@@ -66,7 +66,6 @@ class Carousel extends React.Component<IProps> {
 
   render() {
     const {data} = this.props;
-    console.log('data', data, this.props);
     return (
       <View>
         <SnapCarousel
