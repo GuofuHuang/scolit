@@ -29,7 +29,14 @@ interface IProps extends ModelState {
   navigation: RootStackNavigation;
 }
 
-class Home extends React.Component<IProps> {
+interface IState {
+  refreshing: boolean;
+}
+
+class Home extends React.Component<IProps, IState> {
+  state = {
+    refreshing: false,
+  };
   componentDidMount() {
     const {dispatch} = this.props;
     dispatch({
@@ -63,7 +70,9 @@ class Home extends React.Component<IProps> {
   // 加载更多
   onEndReached = () => {
     const {dispatch, loading, hasMore} = this.props;
-    if (loading || !hasMore) return;
+    if (loading || !hasMore) {
+      return;
+    }
     dispatch({
       type: 'home/fetchChannels',
       payload: {
@@ -91,15 +100,35 @@ class Home extends React.Component<IProps> {
   }
   get empty() {
     const {loading} = this.props;
-    if (loading) return;
+    if (loading) {
+      return;
+    }
     return (
       <View style={styles.empty}>
         <Text>暂无数据</Text>
       </View>
     );
   }
+  onRefresh = () => {
+    // 1. 修改刷新状态为true
+    this.setState({
+      refreshing: true,
+    });
+    // 2. 获取数据
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'home/fetchChannels',
+      callback: () => {
+        // 3. 修改刷新状态为false
+        this.setState({
+          refreshing: false,
+        });
+      },
+    });
+  };
   render() {
     const {channels} = this.props;
+    const {refreshing} = this.state;
     return (
       <FlatList
         ListHeaderComponent={this.header}
@@ -110,6 +139,8 @@ class Home extends React.Component<IProps> {
         keyExtractor={this.keyExtractor}
         onEndReached={this.onEndReached}
         onEndReachedThreshold={0.2}
+        onRefresh={this.onRefresh}
+        refreshing={refreshing}
       />
     );
   }
