@@ -62,16 +62,24 @@ class Home extends React.Component<IProps> {
   renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
     return <ChannelItem data={item} />;
   };
-
-  render() {
-    const {carousels, channels} = this.props;
-    console.log('what', channels);
+  get header() {
+    const {carousels} = this.props;
     return (
-      <ScrollView>
+      <View>
         <Carousel data={carousels} />
         <Guess />
-        <FlatList data={channels} renderItem={this.renderItem} />
-      </ScrollView>
+      </View>
+    );
+  }
+
+  render() {
+    const {channels} = this.props;
+    return (
+      <FlatList
+        ListHeaderComponent={this.header}
+        data={channels}
+        renderItem={this.renderItem}
+      />
     );
   }
 }
