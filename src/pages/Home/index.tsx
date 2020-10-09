@@ -1,12 +1,12 @@
 import React from 'react';
-import {FlatList, ListRenderItemInfo, ScrollView, Text, View} from 'react-native';
+import {FlatList, ListRenderItemInfo, View} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootStackNavigation} from '@/navigator/index';
 import {RootState} from '@/models/index';
 import Carousel from './Carousel';
 import Guess from './Guess';
-import ChannelItem from "@/pages/Home/ChannelItem";
-import {IChannel} from "@/models/home";
+import ChannelItem from '@/pages/Home/ChannelItem';
+import {IChannel} from '@/models/home';
 
 const mapStateToProps = ({home, loading}: RootState) => ({
   carousels: home.carousels,
@@ -33,34 +33,12 @@ class Home extends React.Component<IProps> {
     });
   }
 
-  onPress = () => {
-    const {navigation} = this.props;
-    navigation.navigate('Detail', {
-      id: 100,
-    });
-  };
-  add = () => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'home/add',
-      payload: {
-        num: 10,
-      },
-    });
-  };
-
-  asyncAdd = () => {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'home/asyncAdd',
-      payload: {
-        num: 2,
-      },
-    });
+  onPress = (data: IChannel) => {
+    console.log('data', data);
   };
 
   renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
-    return <ChannelItem data={item} />;
+    return <ChannelItem data={item} onPress={this.onPress} />;
   };
   get header() {
     const {carousels} = this.props;
@@ -71,6 +49,9 @@ class Home extends React.Component<IProps> {
       </View>
     );
   }
+  keyExtractor = (item: IChannel) => {
+    return item.id;
+  };
 
   render() {
     const {channels} = this.props;
@@ -79,6 +60,7 @@ class Home extends React.Component<IProps> {
         ListHeaderComponent={this.header}
         data={channels}
         renderItem={this.renderItem}
+        keyExtractor={this.keyExtractor}
       />
     );
   }
