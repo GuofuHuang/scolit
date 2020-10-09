@@ -12,7 +12,7 @@ import {Platform, StatusBar, StyleSheet} from 'react-native';
 
 export type RootStackParamList = {
   BottomTabs: {
-    scree?: string;
+    screen?: string;
   };
   Detail: {
     id: number;
