@@ -2,7 +2,11 @@ import {Effect, Model} from 'dva-core-ts';
 import {Reducer} from 'redux';
 import axios from 'axios';
 
+// 轮播图
 const CAROUSEL_URL = '/mock/11/carousel';
+
+// 猜你喜欢
+const GUESS_URL = '/mock/11/guess';
 
 export interface ICarousel {
   id: string;
@@ -10,57 +14,44 @@ export interface ICarousel {
   colors: [];
 }
 
+export interface IGUESS {
+  id: string;
+  title: string;
+  image: string;
+}
+
 export interface HomeState {
-  num: number;
   carousels?: ICarousel[];
+  guess: IGUESS[];
 }
 
 interface HomeModel extends Model {
   namespace: 'home';
   state: {
-    num: number;
     carousels: ICarousel[];
+    guess: IGUESS[];
   };
   reducers: {
-    add: Reducer<HomeState>;
-    setStatus: Reducer<HomeState>;
     setState: Reducer<HomeState>;
   };
   effects: {
-    asyncAdd: Effect;
     fetchCarousels: Effect;
+    fetchGuess: Effect;
   };
 }
 
 const initialState = {
-  num: 0,
   carousels: [],
+  guess: [],
 };
-
-function delay(timeout: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, timeout);
-  });
-}
 
 const homeModel: HomeModel = {
   namespace: 'home',
   state: {
-    num: 0,
+    guess: [],
     carousels: [],
   },
   reducers: {
-    add(state = initialState, {payload}) {
-      return {
-        ...state,
-        num: state?.num + payload.num,
-      };
-    },
-    setStatus(state = initialState) {
-      return {
-        ...state,
-      };
-    },
     setState(state = initialState, {payload}) {
       return {
         ...state,
@@ -79,17 +70,13 @@ const homeModel: HomeModel = {
         },
       });
     },
-    *asyncAdd({payload}, {call, put}) {
+    fetchGuess: function* (_, {call, put}) {
+      const {data} = yield call(axios.get, GUESS_URL);
       yield put({
-        type: 'setStatus',
-      });
-      yield call(delay, 3000);
-      yield put({
-        type: 'add',
-        payload,
-      });
-      yield put({
-        type: 'setStatus',
+        type: 'setState',
+        payload: {
+          guess: data,
+        },
       });
     },
   },
