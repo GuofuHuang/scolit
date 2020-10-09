@@ -42,7 +42,6 @@ class Navigator extends React.Component {
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             gestureEnabled: true,
             gestureDirection: 'horizontal',
-            headerStatusBarHeight: StatusBar.currentHeight,
             headerStyle: {
               backgroundColor: 'red',
               ...Platform.select({
