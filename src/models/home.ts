@@ -1,6 +1,7 @@
 import {Effect, Model} from 'dva-core-ts';
 import {Reducer} from 'redux';
 import axios from 'axios';
+import {RootState} from '@/models/index';
 
 // 轮播图
 const CAROUSEL_URL = '/mock/11/carousel';
@@ -32,19 +33,22 @@ export interface IChannel {
   playing: number;
 }
 
+export interface IPagination {
+  current: number;
+  total: number;
+  hasMore: boolean;
+}
+
 export interface HomeState {
-  carousels?: ICarousel[];
+  carousels: ICarousel[];
   guess: IGuess[];
   channels: IChannel[];
+  pagination: IPagination;
 }
 
 interface HomeModel extends Model {
   namespace: 'home';
-  state: {
-    carousels: ICarousel[];
-    guess: IGuess[];
-    channels: IChannel[];
-  };
+  state: HomeState;
   reducers: {
     setState: Reducer<HomeState>;
   };
@@ -59,15 +63,16 @@ const initialState: HomeState = {
   carousels: [],
   guess: [],
   channels: [],
+  pagination: {
+    current: 1,
+    total: 0,
+    hasMore: true,
+  },
 };
 
 const homeModel: HomeModel = {
   namespace: 'home',
-  state: {
-    guess: [],
-    carousels: [],
-    channels: [],
-  },
+  state: initialState,
   reducers: {
     setState(state = initialState, {payload}) {
       return {
@@ -96,14 +101,37 @@ const homeModel: HomeModel = {
         },
       });
     },
-    *fetchChannels(_, {call, put}) {
-      const {data} = yield call(axios.get, CHANNEL_URL);
+    *fetchChannels({callback, payload}, {call, put, select}) {
+      const {channels, pagination} = yield select(
+        (state: RootState) => state.home,
+      );
+      let page = 1;
+      if (payload && payload.loadMore) {
+        page = pagination.current + 1;
+      }
+      const {data} = yield call(axios.get, CHANNEL_URL, {
+        params: {
+          page,
+        },
+      });
+      let newChannels = data.results;
+      if (payload && payload.loadMore) {
+        newChannels = channels.concat(newChannels);
+      }
       yield put({
         type: 'setState',
         payload: {
-          channels: data.results,
+          channels: newChannels,
+          pagination: {
+            current: data.pagination.current,
+            total: data.pagination.total,
+            hasMore: newChannels.length < data.pagination.total,
+          },
         },
       });
+      if (typeof callback === 'function') {
+        callback();
+      }
     },
   },
 };

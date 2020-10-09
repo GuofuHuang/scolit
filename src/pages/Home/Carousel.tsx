@@ -22,7 +22,6 @@ class Carousel extends React.Component<IProps> {
   state = {
     activeSlide: 0,
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   renderItem = (
     {item}: {item: ICarousel},
     parallaxProps?: AdditionalParallaxProps,
