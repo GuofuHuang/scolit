@@ -14,7 +14,7 @@ export interface ICarousel {
   colors: [];
 }
 
-export interface IGUESS {
+export interface IGuess {
   id: string;
   title: string;
   image: string;
@@ -22,14 +22,14 @@ export interface IGUESS {
 
 export interface HomeState {
   carousels?: ICarousel[];
-  guess: IGUESS[];
+  guess: IGuess[];
 }
 
 interface HomeModel extends Model {
   namespace: 'home';
   state: {
     carousels: ICarousel[];
-    guess: IGUESS[];
+    guess: IGuess[];
   };
   reducers: {
     setState: Reducer<HomeState>;

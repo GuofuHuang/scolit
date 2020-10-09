@@ -4,9 +4,11 @@
 import React, { FunctionComponent } from 'react';
 import { ViewProps } from 'react-native';
 import { GProps } from 'react-native-svg';
+import IconnextM from './IconnextM';
+import Iconlike from './Iconlike';
 import Iconhome from './Iconhome';
 
-export type IconNames = 'iconhome';
+export type IconNames = 'iconnext-m' | 'iconlike' | 'iconhome';
 
 interface Props extends GProps, ViewProps {
   name: IconNames;
@@ -16,8 +18,12 @@ interface Props extends GProps, ViewProps {
 
 let IconFont: FunctionComponent<Props> = ({ name, ...rest }) => {
   switch (name) {
+    case 'iconnext-m':
+      return <IconnextM key="1" {...rest} />;
+    case 'iconlike':
+      return <Iconlike key="2" {...rest} />;
     case 'iconhome':
-      return <Iconhome key="1" {...rest} />;
+      return <Iconhome key="3" {...rest} />;
   }
 
   return null;
