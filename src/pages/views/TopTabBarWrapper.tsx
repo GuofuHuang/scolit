@@ -5,15 +5,33 @@ import {
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
 import {getStatusBarHeight} from 'react-native-iphone-x-helper';
+import LinearGradient from 'react-native-linear-gradient';
 import Touchable from '@/components/Touchable';
+import {RootState} from '@/models/index';
+import {connect, ConnectedProps} from 'react-redux';
 
-interface IProps extends MaterialTopTabBarProps {}
+const mapStateToProps = ({home}: RootState) => {
+  return {
+    linearColors: home.carousels
+      ? home.carousels[home.activeCarouselIndex].colors
+      : undefined,
+  };
+};
+const connector = connect(mapStateToProps);
+type ModelState = ConnectedProps<typeof connector>;
+
+type IProps = MaterialTopTabBarProps & ModelState;
 
 class TopTabBarWrapper extends React.Component<IProps> {
+  get linearGradient() {
+    const {linearColors = ['#ccc', '#e2e2e2']} = this.props;
+    return <LinearGradient colors={linearColors} style={styles.gradient} />;
+  }
   render() {
     const {props} = this;
     return (
       <View style={styles.container}>
+        {this.linearGradient}
         <View style={styles.topTabBarView}>
           <MaterialTopTabBar {...props} style={styles.tabBar} />
           <Touchable style={styles.categoryBtn}>
@@ -27,7 +45,6 @@ class TopTabBarWrapper extends React.Component<IProps> {
           <Touchable style={styles.historyBtn}>
             <Text>历史记录</Text>
           </Touchable>
-
         </View>
       </View>
     );
@@ -70,6 +87,10 @@ const styles = StyleSheet.create({
   },
   historyBtn: {
     marginLeft: 24,
+  },
+  gradient: {
+    ...StyleSheet.absoluteFillObject,
+    height: 260,
   },
 });
 

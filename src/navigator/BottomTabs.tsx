@@ -5,7 +5,6 @@ import Found from '@/pages/Found';
 import Account from '@/pages/Account';
 import {RouteProp, TabNavigationState} from '@react-navigation/native';
 import {RootStackNavigation, RootStackParamList} from '@/navigator/index';
-import {Route} from 'react-native';
 import IconFont from '@/assets/iconfont';
 import HomeTabs from '@/navigator/HomeTabs';
 
@@ -41,7 +40,7 @@ function getHeaderTitle(routeName: string) {
 }
 
 class BottomTabs extends React.Component<IProps> {
-  comopnentDidMount() {
+  componentDidMount() {
     this.setOptions();
   }
   componentDidUpdate() {
@@ -53,6 +52,7 @@ class BottomTabs extends React.Component<IProps> {
       ? route.state.routes[route.state.index].name
       : route.params?.screen || 'HomeTabs';
     if (routeName === 'HomeTabs') {
+      console.log('it is hometabs');
       navigation.setOptions({
         headerTransparent: true,
         headerTitle: '',

@@ -55,10 +55,9 @@ class Home extends React.Component<IProps, IState> {
     return <ChannelItem data={item} onPress={this.onPress} />;
   };
   get header() {
-    const {carousels} = this.props;
     return (
       <View>
-        <Carousel data={carousels} />
+        <Carousel />
         <Guess />
       </View>
     );

@@ -11,7 +11,7 @@ axios.interceptors.request.use(
     config.headers = {
       icode: '6F1D72C83F450609',
     };
-    console.log('请求config', config);
+    // console.log('请求config', config);
     return config;
   },
   function (error) {
@@ -22,11 +22,11 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   function (response) {
-    console.log('response', response);
+    // console.log('response', response);
     return response.data;
   },
   function (error) {
-    console.log('error2', JSON.stringify(error));
+    // console.log('error2', JSON.stringify(error));
     return error;
   },
 );

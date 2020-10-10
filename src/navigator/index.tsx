@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
 import Detail from '@/pages/Detail';
-import {Platform, StatusBar, StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
 export type RootStackParamList = {
   BottomTabs: {
