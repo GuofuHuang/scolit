@@ -45,6 +45,7 @@ export interface HomeState {
   guess: IGuess[];
   channels: IChannel[];
   pagination: IPagination;
+  gradientVisible: boolean; // 渐变色是否显示状态
 }
 
 interface HomeModel extends Model {
@@ -65,6 +66,7 @@ const initialState: HomeState = {
   guess: [],
   channels: [],
   activeCarouselIndex: 0,
+  gradientVisible: true,
   pagination: {
     current: 1,
     total: 0,

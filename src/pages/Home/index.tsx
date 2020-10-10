@@ -2,6 +2,8 @@ import React from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   StyleSheet,
   Text,
   View,
@@ -9,7 +11,7 @@ import {
 import {connect, ConnectedProps} from 'react-redux';
 import {RootStackNavigation} from '@/navigator/index';
 import {RootState} from '@/models/index';
-import Carousel from './Carousel';
+import Carousel, {sideHeight} from './Carousel';
 import Guess from './Guess';
 import ChannelItem from '@/pages/Home/ChannelItem';
 import {IChannel} from '@/models/home';
@@ -19,6 +21,7 @@ const mapStateToProps = ({home, loading}: RootState) => ({
   channels: home.channels,
   hasMore: home.pagination.hasMore,
   loading: loading.effects['home/fetchChannels'],
+  gradientVisible: home.gradientVisible,
 });
 
 const connector = connect(mapStateToProps);
@@ -58,7 +61,9 @@ class Home extends React.Component<IProps, IState> {
     return (
       <View>
         <Carousel />
-        <Guess />
+        <View style={styles.background}>
+          <Guess />
+        </View>
       </View>
     );
   }
@@ -125,6 +130,19 @@ class Home extends React.Component<IProps, IState> {
       },
     });
   };
+  onScroll = ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetY = nativeEvent.contentOffset.y;
+    let newGradientVisible = offsetY < sideHeight;
+    const {dispatch, gradientVisible} = this.props;
+    if (gradientVisible !== newGradientVisible) {
+      dispatch({
+        type: 'home/setState',
+        payload: {
+          gradientVisible: newGradientVisible,
+        },
+      });
+    }
+  };
   render() {
     const {channels} = this.props;
     const {refreshing} = this.state;
@@ -140,6 +158,7 @@ class Home extends React.Component<IProps, IState> {
         onEndReachedThreshold={0.2}
         onRefresh={this.onRefresh}
         refreshing={refreshing}
+        onScroll={this.onScroll}
       />
     );
   }
@@ -157,6 +176,9 @@ const styles = StyleSheet.create({
   empty: {
     alignItems: 'center',
     paddingVertical: 100,
+  },
+  background: {
+    backgroundColor: 'white',
   },
 });
 

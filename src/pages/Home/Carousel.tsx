@@ -24,7 +24,7 @@ interface IProps extends ModelState {}
 
 const sliderWidth = viewportWidth;
 // const sideWidth = wp(90);
-const sideHeight = hp(26);
+export const sideHeight = hp(26);
 const itemWidth = wp(90) + wp(2) * 2;
 
 class Carousel extends React.Component<IProps> {
