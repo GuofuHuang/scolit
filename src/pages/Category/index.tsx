@@ -8,11 +8,13 @@ import {viewportWidth} from '@/utils/index';
 import _ from 'lodash';
 import Item from '@/pages/Category/item';
 import HeaderRightBtn from '@/pages/Category/HeaderRightBtn';
+import Touchable from '@/components/Touchable';
 
 const mapStateToProps = ({category}: RootState) => {
   return {
     myCategorys: category.myCategorys,
     categorys: category.categorys,
+    isEdit: category.isEdit,
   };
 };
 
@@ -28,6 +30,8 @@ interface IState {
   myCategorys: ICategory[];
 }
 
+const fixedItems = [0, 1];
+
 const parentWidth = viewportWidth - 10;
 const itemWidth = parentWidth / 4;
 
@@ -40,27 +44,94 @@ class Category extends React.Component<IProps, IState> {
       headerRight: () => <HeaderRightBtn onSubmit={this.onSubmit} />,
     });
   }
-  onSubmit = () => {
+  componentWillUnmount() {
     const {dispatch} = this.props;
     dispatch({
+      type: 'category/setState',
+      payload: {
+        isEdit: false,
+      },
+    });
+  }
+
+  onSubmit = () => {
+    const {dispatch} = this.props;
+    const {myCategorys} = this.state;
+    dispatch({
       type: 'category/toggle',
+      payload: {
+        myCategorys,
+      },
     });
   };
 
-  renderItem = (item: ICategory) => {
-    return <Item key={item.id} data={item} />;
-    // return (
-    //   <View key={item.id} style={styles.itemWrapper}>
-    //     <View style={styles.item}>
-    //       <Text>{item.name}</Text>
-    //     </View>
-    //   </View>
-    // );
+  onLongPress = () => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'category/setState',
+      payload: {
+        isEdit: true,
+      },
+    });
   };
-
+  onPress = (item: ICategory, index: number, selected: boolean) => {
+    const {isEdit} = this.props;
+    const {myCategorys} = this.state;
+    const disabled = fixedItems.indexOf(index) > -1;
+    if (disabled) return;
+    if (isEdit) {
+      if (selected) {
+        this.setState({
+          myCategorys: myCategorys.filter(
+            (selectedItem) => selectedItem.id !== item.id,
+          ),
+        });
+      } else {
+        this.setState({
+          myCategorys: myCategorys.concat([item]),
+        });
+      }
+    }
+  };
+  renderItem = (item: ICategory, index: number) => {
+    const {isEdit} = this.props;
+    const disabled = fixedItems.indexOf(index) > -1;
+    return (
+      <Touchable
+        key={item.id}
+        onLongPress={this.onLongPress}
+        onPress={() => this.onPress(item, index, true)}>
+        <Item
+          key={item.id}
+          data={item}
+          isEdit={isEdit}
+          disabled={disabled}
+          selected
+        />
+      </Touchable>
+    );
+  };
+  renderUnselectedItem = (item: ICategory, index: number) => {
+    const {isEdit} = this.props;
+    return (
+      <Touchable
+        key={item.id}
+        onLongPress={this.onLongPress}
+        onPress={() => this.onPress(item, index, false)}>
+        <Item
+          key={item.id}
+          data={item}
+          isEdit={isEdit}
+          selected={false}
+          disabled={false}
+        />
+      </Touchable>
+    );
+  };
   render() {
     const {categorys} = this.props;
     const {myCategorys} = this.state;
+    console.log('mycategories', myCategorys);
     const classifyGroup = _.groupBy(categorys, (item) => item.classify);
     return (
       <ScrollView style={styles.container}>
@@ -74,7 +145,16 @@ class Category extends React.Component<IProps, IState> {
               <View key={classify}>
                 <Text style={styles.classifyName}>{classify}</Text>
                 <View style={styles.classifyView}>
-                  {classifyGroup[classify].map(this.renderItem)}
+                  {classifyGroup[classify].map((item, index) => {
+                    if (
+                      myCategorys.find(
+                        (selectedItem) => selectedItem.id === item.id,
+                      )
+                    ) {
+                      return null;
+                    }
+                    return this.renderUnselectedItem(item, index);
+                  })}
                 </View>
               </View>
             );
