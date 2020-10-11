@@ -4,11 +4,16 @@ import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootStackNavigation} from '@/navigator/index';
 import {ICategory} from '@/models/category';
-import {viewportWidth} from '@/utils/index';
 import _ from 'lodash';
-import Item from '@/pages/Category/item';
+import Item, {
+  itemHeight,
+  itemWidth,
+  parentWidth,
+  margin,
+} from '@/pages/Category/item';
 import HeaderRightBtn from '@/pages/Category/HeaderRightBtn';
 import Touchable from '@/components/Touchable';
+import {DragSortableView} from 'react-native-drag-sort';
 
 const mapStateToProps = ({category}: RootState) => {
   return {
@@ -31,9 +36,6 @@ interface IState {
 }
 
 const fixedItems = [0, 1];
-
-const parentWidth = viewportWidth - 10;
-const itemWidth = parentWidth / 4;
 
 class Category extends React.Component<IProps, IState> {
   state = {
@@ -97,18 +99,13 @@ class Category extends React.Component<IProps, IState> {
     const {isEdit} = this.props;
     const disabled = fixedItems.indexOf(index) > -1;
     return (
-      <Touchable
+      <Item
         key={item.id}
-        onLongPress={this.onLongPress}
-        onPress={() => this.onPress(item, index, true)}>
-        <Item
-          key={item.id}
-          data={item}
-          isEdit={isEdit}
-          disabled={disabled}
-          selected
-        />
-      </Touchable>
+        data={item}
+        isEdit={isEdit}
+        disabled={disabled}
+        selected
+      />
     );
   };
   renderUnselectedItem = (item: ICategory, index: number) => {
@@ -118,18 +115,20 @@ class Category extends React.Component<IProps, IState> {
         key={item.id}
         onLongPress={this.onLongPress}
         onPress={() => this.onPress(item, index, false)}>
-        <Item
-          key={item.id}
-          data={item}
-          isEdit={isEdit}
-          selected={false}
-          disabled={false}
-        />
+        <Item key={item.id} data={item} isEdit={isEdit} selected={false} />
       </Touchable>
     );
   };
+  onDataChange = (data: ICategory[]) => {
+    this.setState({
+      myCategorys: data,
+    });
+  };
+  onClickItem = (data: ICategory[], item: ICategory) => {
+    this.onPress(item, data.indexOf(item), true);
+  };
   render() {
-    const {categorys} = this.props;
+    const {categorys, isEdit} = this.props;
     const {myCategorys} = this.state;
     console.log('mycategories', myCategorys);
     const classifyGroup = _.groupBy(categorys, (item) => item.classify);
@@ -137,7 +136,19 @@ class Category extends React.Component<IProps, IState> {
       <ScrollView style={styles.container}>
         <Text style={styles.classifyName}>我的分类</Text>
         <View style={styles.classifyView}>
-          {myCategorys.map(this.renderItem)}
+          <DragSortableView
+            fixedItems={fixedItems}
+            dataSource={myCategorys}
+            renderItem={this.renderItem}
+            sortable={isEdit}
+            keyExtractor={(item) => item.id}
+            onDataChange={this.onDataChange}
+            parentWidth={parentWidth}
+            childrenWidth={itemWidth}
+            childrenHeight={itemHeight}
+            marginChildrenTop={margin}
+            onClickItem={this.onClickItem}
+          />
         </View>
         <View>
           {Object.keys(classifyGroup).map((classify) => {
