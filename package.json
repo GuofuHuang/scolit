@@ -37,6 +37,7 @@
     "react-native-storage": "^1.0.1",
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.2",
+    "react-navigation-header-buttons": "^5.0.2",
     "react-redux": "^7.2.1",
     "redux-observable": "^1.2.0"
   },

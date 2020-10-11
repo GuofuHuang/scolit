@@ -2,6 +2,7 @@ import {Effect, Model, SubscriptionsMapObject} from 'dva-core-ts';
 import {Reducer} from 'redux';
 import storage, {load} from '@/config/storage';
 import axios from 'axios';
+import {RootState} from '@/models/index';
 
 const CATEGORY_URL = '/mock/11/category';
 
@@ -14,6 +15,7 @@ export interface ICategory {
 interface CategoryModelState {
   myCategorys: ICategory[];
   categorys: ICategory[];
+  isEdit: boolean;
 }
 
 interface CategoryModel extends Model {
@@ -21,6 +23,7 @@ interface CategoryModel extends Model {
   state: CategoryModelState;
   effects: {
     loadData: Effect;
+    toggle: Effect;
   };
   reducers: {
     setState: Reducer<CategoryModelState>;
@@ -40,6 +43,7 @@ const initialState = {
     },
   ],
   categorys: [],
+  isEdit: false,
 };
 
 const categoryModel: CategoryModel = {
@@ -67,6 +71,15 @@ const categoryModel: CategoryModel = {
           },
         });
       }
+    },
+    *toggle(_, {put, select}) {
+      const category = yield select(({category}: RootState) => category);
+      yield put({
+        type: 'setState',
+        payload: {
+          isEdit: !category.isEdit,
+        },
+      });
     },
   },
   reducers: {

@@ -6,7 +6,8 @@ import {RootStackNavigation} from '@/navigator/index';
 import {ICategory} from '@/models/category';
 import {viewportWidth} from '@/utils/index';
 import _ from 'lodash';
-import Item from "@/pages/Category/item";
+import Item from '@/pages/Category/item';
+import HeaderRightBtn from '@/pages/Category/HeaderRightBtn';
 
 const mapStateToProps = ({category}: RootState) => {
   return {
@@ -25,7 +26,6 @@ interface IProps extends ModelState {
 
 interface IState {
   myCategorys: ICategory[];
-  scrollEnabled: boolean;
 }
 
 const parentWidth = viewportWidth - 10;
@@ -34,7 +34,17 @@ const itemWidth = parentWidth / 4;
 class Category extends React.Component<IProps, IState> {
   state = {
     myCategorys: this.props.myCategorys,
-    scrollEnabled: true,
+  };
+  componentDidMount() {
+    this.props.navigation.setOptions({
+      headerRight: () => <HeaderRightBtn onSubmit={this.onSubmit} />,
+    });
+  }
+  onSubmit = () => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'category/toggle',
+    });
   };
 
   renderItem = (item: ICategory) => {
