@@ -9,11 +9,13 @@ import {
 import BottomTabs from './BottomTabs';
 import Detail from '@/pages/Detail';
 import {Platform, StyleSheet} from 'react-native';
+import Category from '@/pages/Category';
 
 export type RootStackParamList = {
   BottomTabs: {
     screen?: string;
   };
+  Category: undefined;
   Detail: {
     id: number;
   };
@@ -57,6 +59,13 @@ class Navigator extends React.Component {
             component={BottomTabs}
             options={{
               headerTitle: '首页',
+            }}
+          />
+          <Stack.Screen
+            name="Category"
+            component={Category}
+            options={{
+              headerTitle: '分类',
             }}
           />
           <Stack.Screen
