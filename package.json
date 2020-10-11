@@ -11,6 +11,7 @@
     "icon": "npx iconfont-rn"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.9.1",
     "@react-navigation/material-top-tabs": "^5.2.19",
@@ -31,6 +32,7 @@
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-storage": "^1.0.1",
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.2",
     "react-redux": "^7.2.1",
