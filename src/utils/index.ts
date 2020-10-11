@@ -1,4 +1,5 @@
 import {Dimensions} from 'react-native';
+import {NavigationState} from 'react-native-tab-view';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 
@@ -14,6 +15,13 @@ function hp(percentage: number) {
   return Math.round(value);
 }
 
+function getActiveRouteName(state: NavigationState<any>) {
+  let route;
+  route = state.routes[state.index];
+  while (route.state && route.state.index) {
+    route = route.state.routes[route.state.index];
+  }
+  return route.name;
+}
 
-
-export {viewportWidth, viewportHeight, wp, hp};
+export {viewportWidth, viewportHeight, wp, hp, getActiveRouteName};

@@ -9,13 +9,16 @@ import LinearAnimatedGradientTransition from 'react-native-linear-animated-gradi
 import Touchable from '@/components/Touchable';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
+import {getActiveRouteName} from '@/utils/index';
 
-const mapStateToProps = ({home}: RootState) => {
+const mapStateToProps = (state: RootState, props: MaterialTopTabBarProps) => {
+  const routeName = getActiveRouteName(props.state);
+  const modelState = state[routeName];
   return {
-    gradientVisible: home.gradientVisible,
+    gradientVisible: modelState.gradientVisible,
     linearColors:
-      home.carousels.length > 0
-        ? home.carousels[home.activeCarouselIndex].colors
+      modelState.carousels.length > 0
+        ? modelState.carousels[modelState.activeCarouselIndex].colors
         : [],
   };
 };

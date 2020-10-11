@@ -15,14 +15,24 @@ import Carousel, {sideHeight} from './Carousel';
 import Guess from './Guess';
 import ChannelItem from '@/pages/Home/ChannelItem';
 import {IChannel} from '@/models/home';
+import {HomeParamList} from '@/navigator/HomeTabs';
+import {RouteProp} from '@react-navigation/native';
 
-const mapStateToProps = ({home, loading}: RootState) => ({
-  carousels: home.carousels,
-  channels: home.channels,
-  hasMore: home.pagination.hasMore,
-  loading: loading.effects['home/fetchChannels'],
-  gradientVisible: home.gradientVisible,
-});
+const mapStateToProps = (
+  state: RootState,
+  {route}: {route: RouteProp<HomeParamList, string>},
+) => {
+  const {namespace} = route.params;
+  const modelState = state[namespace];
+  return {
+    namespace,
+    carousels: modelState.carousels,
+    channels: modelState.channels,
+    hasMore: modelState.pagination.hasMore,
+    loading: state.loading.effects[namespace + '/fetchChannels'],
+    gradientVisible: modelState.gradientVisible,
+  };
+};
 
 const connector = connect(mapStateToProps);
 
@@ -30,6 +40,7 @@ type ModelState = ConnectedProps<typeof connector>;
 
 interface IProps extends ModelState {
   navigation: RootStackNavigation;
+  namespcae: string;
 }
 
 interface IState {
@@ -41,12 +52,12 @@ class Home extends React.Component<IProps, IState> {
     refreshing: false,
   };
   componentDidMount() {
-    const {dispatch} = this.props;
+    const {dispatch, namespace} = this.props;
     dispatch({
-      type: 'home/fetchCarousels',
+      type: namespace + '/fetchCarousels',
     });
     dispatch({
-      type: 'home/fetchChannels',
+      type: namespace + '/fetchChannels',
     });
   }
 
@@ -58,11 +69,12 @@ class Home extends React.Component<IProps, IState> {
     return <ChannelItem data={item} onPress={this.onPress} />;
   };
   get header() {
+    const {namespcae} = this.props;
     return (
       <View>
         <Carousel />
         <View style={styles.background}>
-          <Guess />
+          <Guess namespace={namespcae} />
         </View>
       </View>
     );
@@ -73,12 +85,12 @@ class Home extends React.Component<IProps, IState> {
 
   // 加载更多
   onEndReached = () => {
-    const {dispatch, loading, hasMore} = this.props;
+    const {dispatch, loading, hasMore, namespace} = this.props;
     if (loading || !hasMore) {
       return;
     }
     dispatch({
-      type: 'home/fetchChannels',
+      type: namespace + '/fetchChannels',
       payload: {
         loadMore: true,
       },
@@ -119,9 +131,9 @@ class Home extends React.Component<IProps, IState> {
       refreshing: true,
     });
     // 2. 获取数据
-    const {dispatch} = this.props;
+    const {dispatch, namespace} = this.props;
     dispatch({
-      type: 'home/fetchChannels',
+      type: namespace + '/fetchChannels',
       callback: () => {
         // 3. 修改刷新状态为false
         this.setState({
@@ -132,11 +144,12 @@ class Home extends React.Component<IProps, IState> {
   };
   onScroll = ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = nativeEvent.contentOffset.y;
+    const {namespace} = this.props;
     let newGradientVisible = offsetY < sideHeight;
     const {dispatch, gradientVisible} = this.props;
     if (gradientVisible !== newGradientVisible) {
       dispatch({
-        type: 'home/setState',
+        type: namespace + '/setState',
         payload: {
           gradientVisible: newGradientVisible,
         },
