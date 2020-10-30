@@ -11,8 +11,7 @@ class Detail extends React.Component<IProps> {
     const {route} = this.props;
     return (
       <View>
-        <Text>Detail</Text>
-        <Text>{route.params.id}</Text>
+        <Text>whats</Text>
       </View>
     );
   }
