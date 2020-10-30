@@ -1,8 +1,9 @@
 import React from 'react';
 import {View, Image, Text, StyleSheet} from 'react-native';
 import Touchable from '@/components/Touchable';
-import defaultAvatarImg from '@/assets/default_avatar.png';
 import {navigate} from '../utils';
+// @ts-ignore
+import defaultAvatarImg from '@/assets/default_avatar.png';
 
 interface IProps {
   authority?: boolean;
@@ -22,6 +23,7 @@ class Authorized extends React.Component<IProps> {
   }
 
   renderNoMatch = () => {
+    console.log('no match', this.props.noMatch);
     if (this.props.noMatch) {
       return <View>{this.props.noMatch()}</View>;
     }

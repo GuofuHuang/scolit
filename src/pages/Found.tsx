@@ -9,9 +9,8 @@ interface IProps {
 class Found extends React.Component<IProps> {
   onPress = () => {
     const {navigation} = this.props;
-    navigation.navigate('Detail', {
-      id: 100,
-    });
+    // navigate('Category');
+    navigation.navigate('Detail');
   };
   render() {
     return (

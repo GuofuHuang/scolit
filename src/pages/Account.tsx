@@ -35,6 +35,7 @@ class Account extends React.Component<IProps> {
 
   render() {
     const {user} = this.props;
+    console.log('user', user, !user, !!user);
     return (
       <Authorized authority={!!user}>
         <View>

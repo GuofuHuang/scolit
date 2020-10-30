@@ -5,7 +5,7 @@ import Toast from 'react-native-root-toast';
 import {goBack} from '@/utils/index';
 import storage, {load} from '@/config/storage';
 
-const USER_URL = '/login';
+const USER_URL = '/auth/login';
 
 export interface IUser {
   name: string;
@@ -48,7 +48,8 @@ const userModel: UserModel = {
   effects: {
     *login({payload}, {call, put}) {
       const {data, status, msg} = yield call(axios.post, USER_URL, payload);
-      if (status === 100) {
+      // console.log('data', data, status, msg, payload, USER_URL);
+      if (status === 200) {
         yield put({
           type: 'setState',
           payload: {
@@ -98,6 +99,7 @@ const userModel: UserModel = {
   },
   subscriptions: {
     setup({dispatch}) {
+      console.log('change');
       dispatch({
         type: 'loadStorage',
       });

@@ -8,12 +8,12 @@ import * as Yup from 'yup';
 import Input from '@/components/Input';
 
 interface Values {
-  account: string;
+  username: string;
   password: string;
 }
 
 const initialValues: Values = {
-  account: '',
+  username: '',
   password: '',
 };
 
@@ -28,13 +28,20 @@ const connector = connect(mapStateToProps);
 type ModelState = ConnectedProps<typeof connector>;
 
 const validationSchema = Yup.object().shape({
-  account: Yup.string().trim().required('请输入您的账号'),
+  username: Yup.string().trim().required('请输入您的账号'),
   password: Yup.string().trim().required('请输入密码'),
 });
 
 class Login extends React.Component<ModelState> {
+  componentDidMount() {
+    // fetch('http://localhost:9000/testAPI').then((res) =>
+    //   console.log('res', res),
+    // );
+  }
+
   onSubmit = (values: Values) => {
     const {dispatch} = this.props;
+    console.log('handle submit');
     dispatch({
       type: 'user/login',
       payload: values,
@@ -53,8 +60,9 @@ class Login extends React.Component<ModelState> {
             return (
               <View>
                 <Field
-                  name="account"
+                  name="username"
                   placeholder="请输入账号"
+                  autoCapitalize="none"
                   component={Input}
                 />
                 <Field

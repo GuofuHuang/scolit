@@ -130,7 +130,6 @@ class Category extends React.Component<IProps, IState> {
   render() {
     const {categorys, isEdit} = this.props;
     const {myCategorys} = this.state;
-    console.log('mycategories', myCategorys);
     const classifyGroup = _.groupBy(categorys, (item) => item.classify);
     return (
       <ScrollView style={styles.container}>

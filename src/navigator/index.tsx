@@ -15,11 +15,13 @@ import {getActiveRouteName, navigationRef} from '../utils';
 import Login from '@/pages/Login';
 // import SplashScreen from 'react-native-splash-screen';
 import IconFont from '@/assets/iconfont';
+import ProductCategory from '@/pages/ProductCategory';
 
 export type RootStackParamList = {
   BottomTabs: {
     screen?: string;
   };
+  ProductCategory: undefined;
   Category: undefined;
   Album: {
     item: {
@@ -29,6 +31,7 @@ export type RootStackParamList = {
     };
     opacity?: Animated.Value;
   };
+  Detail: undefined;
 };
 
 export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
@@ -79,13 +82,6 @@ function RootStackScreen() {
           headerTitle: '首页',
         }}
       />
-      <Stack.Screen
-        name="Category"
-        component={Category}
-        options={{
-          headerTitle: '分类',
-        }}
-      />
     </Stack.Navigator>
   );
 }
@@ -96,6 +92,8 @@ export type ModalStackParamList = {
     id: string;
   };
   Login: undefined;
+  ProductCategory: undefined;
+  Category: undefined;
 };
 
 const ModalStack = createStackNavigator<ModalStackParamList>();
@@ -135,6 +133,20 @@ function ModalStackScreen() {
               style={styles.headerBackImage}
             />
           ),
+        }}
+      />
+      <ModalStack.Screen
+        name="ProductCategory"
+        component={ProductCategory}
+        options={{
+          headerTitle: '物料类别',
+        }}
+      />
+      <ModalStack.Screen
+        name="Category"
+        component={Category}
+        options={{
+          headerTitle: '物料类别',
         }}
       />
       <ModalStack.Screen
