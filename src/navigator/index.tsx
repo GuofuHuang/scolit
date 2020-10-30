@@ -19,6 +19,7 @@ export type RootStackParamList = {
   Detail: {
     id: number;
   };
+  Album: undefined;
 };
 
 export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
@@ -75,8 +76,8 @@ class Navigator extends React.Component {
             }}
           />
           <Stack.Screen
-            options={{headerTitle: '详情页'}}
             name="Detail"
+            options={{headerTitle: '详情页'}}
             component={Detail}
           />
         </Stack.Navigator>

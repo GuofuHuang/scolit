@@ -66,6 +66,7 @@ class BottomTabs extends React.Component<IProps> {
   };
 
   render() {
+    console.log('what');
     return (
       <Tab.Navigator
         tabBarOptions={{

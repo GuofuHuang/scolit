@@ -12,11 +12,11 @@ import {connect, ConnectedProps} from 'react-redux';
 import {RootStackNavigation} from '@/navigator/index';
 import {RootState} from '@/models/index';
 import Carousel, {sideHeight} from './Carousel';
-import Guess from './Guess';
 import ChannelItem from '@/pages/Home/ChannelItem';
 import {IChannel} from '@/models/home';
 import {HomeParamList} from '@/navigator/HomeTabs';
 import {RouteProp} from '@react-navigation/native';
+import Product from '@/pages/Home/Product';
 
 const mapStateToProps = (
   state: RootState,
@@ -73,9 +73,10 @@ class Home extends React.Component<IProps, IState> {
     return (
       <View>
         <Carousel />
-        <View style={styles.background}>
-          <Guess namespace={namespcae} />
-        </View>
+        <Product navigation={this.props.navigation} />
+        {/*<View style={styles.background}>*/}
+        {/*  <Guess namespace={namespcae} />*/}
+        {/*</View>*/}
       </View>
     );
   }
