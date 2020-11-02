@@ -52,7 +52,6 @@ class BottomTabs extends React.Component<IProps> {
       ? route.state.routes[route.state.index].name
       : route.params?.screen || 'HomeTabs';
     if (routeName === 'HomeTabs') {
-      console.log('it is hometabs');
       navigation.setOptions({
         headerTransparent: true,
         headerTitle: '',
@@ -66,7 +65,6 @@ class BottomTabs extends React.Component<IProps> {
   };
 
   render() {
-    console.log('what');
     return (
       <Tab.Navigator
         tabBarOptions={{

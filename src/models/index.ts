@@ -4,7 +4,7 @@ import category from '@/models/category';
 import album from '@/models/album';
 import user from '@/models/user';
 import productCategory from '@/models/productCategory';
-const models = [home, category, user, productCategory];
+const models = [home, album, category, user, productCategory];
 
 export type RootState = {
   home: typeof home.state;

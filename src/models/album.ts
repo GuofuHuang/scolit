@@ -5,20 +5,21 @@ import axios from 'axios';
 const ALBUM_URL = '/mock/11/album/list';
 
 // 节目
-interface IProgram {
+export interface IProgram {
   id: string;
   title: string;
-  playVolumn: number;
+  playVolume: number;
   duration: string;
   date: string;
 }
 
+// 作者
 interface IAuthor {
   name: string;
   avatar: string;
 }
 
-interface IAlbumModelState {
+export interface IAlbumModelState {
   id: string;
   title: string;
   summary: string;
@@ -28,7 +29,7 @@ interface IAlbumModelState {
   list: IProgram[];
 }
 
-interface AlbumModel extends Model {
+export interface AlbumModel extends Model {
   namespace: 'album';
   state: IAlbumModelState;
   effects: {
@@ -56,8 +57,9 @@ const albumModel: AlbumModel = {
   namespace: 'album',
   state: initialState,
   effects: {
-    *fetchAlbum({payload}, {call, put}) {
+    *fetchAlbum(_, {call, put}) {
       const {data} = yield call(axios.get, ALBUM_URL);
+      console.log('fetch album121212', data);
       yield put({
         type: 'setState',
         payload: data,
@@ -65,7 +67,7 @@ const albumModel: AlbumModel = {
     },
   },
   reducers: {
-    setState(state, {payload}) {
+    setState(state = initialState, {payload}) {
       return {
         ...state,
         ...payload,

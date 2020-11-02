@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-community/blur": "^3.6.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.9.1",
     "@react-navigation/material-top-tabs": "^5.2.19",
@@ -45,6 +46,7 @@
     "react-native-tab-view": "^2.15.2",
     "react-navigation-header-buttons": "^5.0.2",
     "react-redux": "^7.2.1",
+    "realm": "^10.0.1",
     "redux-observable": "^1.2.0",
     "yup": "^0.29.3"
   },

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Config from 'react-native-config';
 
-// axios.defaults.baseURL = Config.API_URL;
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = Config.API_URL;
+// axios.defaults.baseURL = 'http://localhost:3000';
 // axios.defaults.headers = {
 //   icode: '6F1D72C83F450609',
 // };

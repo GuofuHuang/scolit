@@ -13,10 +13,10 @@ import {RootStackNavigation} from '@/navigator/index';
 import {RootState} from '@/models/index';
 import Carousel, {sideHeight} from './Carousel';
 import ChannelItem from '@/pages/Home/ChannelItem';
-import {IChannel} from '@/models/home';
+import {IChannel, IGuess} from '@/models/home';
 import {HomeParamList} from '@/navigator/HomeTabs';
 import {RouteProp} from '@react-navigation/native';
-import Product from '@/pages/Home/Product';
+import Guess from '@/pages/Home/Guess';
 
 const mapStateToProps = (
   state: RootState,
@@ -61,22 +61,24 @@ class Home extends React.Component<IProps, IState> {
     });
   }
 
-  onPress = (data: IChannel) => {
+  goAlbum = (data: IChannel | IGuess) => {
     console.log('data', data);
+    const {navigation} = this.props;
+    navigation.navigate('Album', {item: data});
   };
 
   renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
-    return <ChannelItem data={item} onPress={this.onPress} />;
+    return <ChannelItem data={item} onPress={this.goAlbum} />;
   };
   get header() {
-    const {namespcae} = this.props;
+    const {namespace} = this.props;
     return (
       <View>
         <Carousel />
-        <Product navigation={this.props.navigation} />
-        {/*<View style={styles.background}>*/}
-        {/*  <Guess namespace={namespcae} />*/}
-        {/*</View>*/}
+        {/*<Product navigation={this.props.navigation} />*/}
+        <View style={styles.background}>
+          <Guess namespace={namespace} goAlbum={this.goAlbum} />
+        </View>
       </View>
     );
   }

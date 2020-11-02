@@ -36,7 +36,6 @@ const productCategoryModel: ProductCategoryModel = {
   effects: {
     *getAll(_, {call, put}) {
       const productCategories = yield call(load, {key: 'productCategories'});
-      console.log('setstate????', productCategories);
       if (productCategories) {
         yield put({
           type: 'setState',
